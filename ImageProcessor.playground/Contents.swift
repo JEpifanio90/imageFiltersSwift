@@ -1,7 +1,7 @@
 //: Playground - noun: a place where people can play
 
 import UIKit
-import Foundation
+import Darwin
 
 let image = UIImage(named: "sample")!
 
@@ -57,7 +57,7 @@ class ImagesFilter
         print(grayScaleImage)
     }
     
-    func SepiaFilter()
+    func crazyFilter(redInput: UInt, greenInput: UInt, blueInput: UInt)
     {
         for y in 0..<rgbaImage.height
         {
@@ -65,9 +65,9 @@ class ImagesFilter
             {
                 let index = y*rgbaImage.width + x
                 var pixel = rgbaImage.pixels[index]
-                let red = (0.393 * Double(pixel.red)) + (0.769 * Double(pixel.green)) + (0.189 * Double(pixel.blue))
-                let green = (0.349 * Double(pixel.red)) + (0.686 * Double(pixel.green)) + (0.168 * Double(pixel.blue))
-                let blue = (0.272 * Double(pixel.red)) + (0.534 * Double(pixel.green)) + (0.131 * Double(pixel.blue))
+                let red = redInput
+                let green = greenInput
+                let blue = blueInput
                 pixel.red = UInt8(red)
                 pixel.green = UInt8(green)
                 pixel.blue = UInt8(blue)
@@ -80,7 +80,7 @@ class ImagesFilter
         print(sepiaImage)
     }
     
-    func redOvercharge()
+    func redOverload()
     {
         
         for y in 0..<rgbaImage.width
@@ -97,8 +97,25 @@ class ImagesFilter
         let redOverchargeImage = rgbaImage.toUIImage()
         print(redOverchargeImage)
     }
+    func redOverload(redValue:UInt)
+    {
+        
+        for y in 0..<rgbaImage.width
+        {
+            for x in 0..<rgbaImage.height
+            {
+                let index = y * rgbaImage.width + x
+                var pixel = rgbaImage.pixels[index]
+                pixel.red = UInt8(redValue)
+                rgbaImage.pixels[index]=pixel
+            }
+        }
+        
+        let redOverchargeImage = rgbaImage.toUIImage()
+        print(redOverchargeImage)
+    }
     
-    func blueOvercharge()
+    func blueOverload()
     {
         
         for y in 0..<rgbaImage.width
@@ -116,7 +133,25 @@ class ImagesFilter
         print(blueOverchargeImage)
     }
     
-    func greenOverCharge()
+    func blueOverload(blueValue:UInt)
+    {
+        
+        for y in 0..<rgbaImage.width
+        {
+            for x in 0..<rgbaImage.height
+            {
+                let index = y * rgbaImage.width + x
+                var pixel = rgbaImage.pixels[index]
+                pixel.blue = UInt8(blueValue)
+                rgbaImage.pixels[index]=pixel
+            }
+        }
+        
+        let blueOverchargeImage = rgbaImage.toUIImage()
+        print(blueOverchargeImage)
+    }
+    
+    func greenOverload()
     {
         
         for y in 0..<rgbaImage.width
@@ -134,38 +169,50 @@ class ImagesFilter
         print(greenOverChargeImage)
     }
     
-    /*func ContrastImage()
+    func greenOverload(greenValue: UInt)
     {
+        
         for y in 0..<rgbaImage.width
         {
             for x in 0..<rgbaImage.height
             {
                 let index = y * rgbaImage.width + x
                 var pixel = rgbaImage.pixels[index]
-                
-                let maxValue = max(pixel.red, pixel.green, pixel.blue)
-                let minValue = min(pixel.red, pixel.green, pixel.blue)
-                //Float(maxValue)+Float(maxValue)
-                let contrast = UInt8((maxValue*((log(maxValue+pixel.red))/(UInt8(log(23.040))))))
-                
-                pixel!.red = contrast
-                pixel!.green = contrast
-                pixel!.blue = contrast
-                
-                rgbaImage.pixels[index] = pixel
+                pixel.green = UInt8(greenValue)
+                rgbaImage.pixels[index]=pixel
             }
         }
         
-        let contrastImage = rgbaImage.toUIImage()
-        print (contrastImage)
-    }*/
+        let greenOverChargeImage = rgbaImage.toUIImage()
+        print(greenOverChargeImage)
+    }
 }
 
 
-ImagesFilter().GrayScaleFilter()
-ImagesFilter().NegativeFilter()
-//ImagesFilter().SepiaFilter()
-//ImagesFilter().ContrastImage()
-ImagesFilter().redOvercharge()
-ImagesFilter().greenOverCharge()
-ImagesFilter().blueOvercharge()
+var filterName = "grayScale"
+
+switch filterName
+{
+    case "grayScale":
+        ImagesFilter().GrayScaleFilter()
+    case "negativeFilter":
+        ImagesFilter().NegativeFilter()
+    case "redOverload":
+        ImagesFilter().redOverload()
+    case "redParamOverload":
+        ImagesFilter().redOverload(64)
+    case "greenOverload":
+        ImagesFilter().greenOverload()
+    case "greenParamOverload":
+        ImagesFilter().greenOverload(183)
+    case "blueOverload":
+        ImagesFilter().blueOverload()
+    case "blueParamOverload":
+        ImagesFilter().blueOverload(124)
+    case "crazyFilter":
+        ImagesFilter().crazyFilter(102, greenInput: 242, blueInput: 134)
+    
+    default:
+        ImagesFilter().GrayScaleFilter()
+}
+
